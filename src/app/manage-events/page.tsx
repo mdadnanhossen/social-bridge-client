@@ -437,13 +437,7 @@ const data: unknown = await response.json();
     [events]
   );
 
-  /**
-   * Status the UI should render.
-   *
-   * Still loading until localStorage hydrates; once it has, an organizer with
-   * no remembered email simply sees the "no organizer" empty state instead of
-   * an endless skeleton. Otherwise the fetch decides.
-   */
+
   const viewStatus: LoadStatus = !isHydrated
     ? "loading"
     : organizerEmail
