@@ -24,14 +24,7 @@ import EventJoinBar from "./event-join-bar";
 import { apiUrl } from "@/lib/api";
 import { getTokenServer } from "@/lib/getTokenServer";
 
-/**
- * Event details page.
- *
- * Loads a single donation event from the social-bridge backend and renders it
- * as a cover hero plus an "about / guidelines / organizer" layout. The fetch is
- * uncached, so it runs inside a Suspense boundary (required by Cache
- * Components) with a skeleton as the fallback.
- */
+
 
 /** Events API of the social-bridge backend (see social-bridge-server/index.js). */
 const EVENT_API_URL = apiUrl("/upcoming-event");
