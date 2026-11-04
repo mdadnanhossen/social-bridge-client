@@ -513,7 +513,6 @@ const data: unknown = await response.json();
 
         <div className="mt-8 border-t border-border" />
 
-        {/* Signed-in organizer summary */}
         {organizerEmail && viewStatus === "success" && events.length > 0 && (
           <div className="mt-6 inline-flex max-w-full items-center gap-2 rounded-xl border border-brand-100 bg-brand-50 px-4 py-2.5 text-sm text-brand-900">
             <Lock className="size-4 shrink-0 text-brand-700" aria-hidden="true" />
