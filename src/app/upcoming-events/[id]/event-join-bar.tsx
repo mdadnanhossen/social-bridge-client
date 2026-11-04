@@ -7,13 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useJoinedEvents } from "@/hooks/use-joined-events";
 import { toggleEventJoin } from "@/lib/joined-events";
 
-/**
- * Volunteer sign-up bar shown under the event cover.
- *
- * Sign-ups are persisted in localStorage (see lib/joined-events) until the
- * backend exposes a join-event endpoint — joining increments the counter,
- * toasts, and keeps the joined-events page in sync.
- */
+
 export default function EventJoinBar({
   id,
   title,
