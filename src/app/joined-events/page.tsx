@@ -44,12 +44,13 @@ const SKELETON_CARD_COUNT = 3;
 interface DonationEvent {
   _id: string;
   title: string;
-  /** Event type, e.g. "Food Distribution" or "Blood Donation". */
+  
   type?: string;
-  /** Event day, stored by the create-event form as "YYYY-MM-DD". */
+  
   date: string;
   location?: string;
-  /** HTTPS URL of the event thumbnail. */
+
+  
   thumbnail?: string;
   description?: string;
 }
