@@ -1,36 +1,166 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Social Bridge – Frontend
 
-## Getting Started
+Social Bridge is a community service platform designed to connect volunteers with people in need. It allows users to discover community service events, participate in social initiatives, and organize activities that make a positive impact on society.
 
-First, run the development server:
+This repository contains the frontend application of Social Bridge, built with Next.js and modern web technologies.
+
+## 🚀 Technologies Used
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Better Auth
+- MongoDB (via Backend API)
+- Lucide React
+- Sonner
+- Base UI / shadcn components
+
+## ✨ Features
+
+- Modern and responsive user interface.
+- User authentication and authorization.
+- Google authentication integration.
+- Browse upcoming community service events.
+- Search events by keywords.
+- Filter events by categories.
+- View individual event details.
+- Create new community service events.
+- Manage events created by organizers.
+- Update existing events.
+- Delete events.
+- Protected routes for authenticated users.
+- Toast notifications for user feedback.
+- Dark mode support.
+
+## 📁 Project Structure
+
+```text
+social-bridge-client/
+├── public/
+├── src/
+│   ├── app/
+│   ├── components/
+│   │   ├── forms/
+│   │   ├── shared/
+│   │   └── ui/
+│   ├── hooks/
+│   ├── lib/
+│   └── ...
+├── .env
+├── .gitignore
+├── next.config.ts
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── README.md
+```
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone YOUR_FRONTEND_REPOSITORY_URL
+```
+
+### 2. Navigate to the Project Directory
+
+```bash
+cd social-bridge-client
+```
+
+### 3. Install Dependencies
+
+```bash
+npm install
+```
+
+### 4. Configure Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```env
+NEXT_PUBLIC_API_URL=your_backend_api_url
+BETTER_AUTH_URL=your_frontend_url
+BETTER_AUTH_SECRET=your_auth_secret
+
+BETTER_AUTH_GOOGLE_CLIENT_ID=your_google_client_id
+BETTER_AUTH_GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
+
+**Important:** Replace the placeholder values with your actual environment configuration. Never expose secret keys or commit environment files to GitHub.
+
+### 5. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 6. Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+Start the production server:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔗 Backend Integration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Social Bridge frontend communicates with the Express.js backend through REST APIs.
 
-## Deploy on Vercel
+The backend handles:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Event creation and management.
+- Event data retrieval.
+- MongoDB database operations.
+- JWT-based API authentication.
+- Protected API requests.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Configure the backend URL using:
+
+```env
+NEXT_PUBLIC_API_URL=your_backend_api_url
+```
+
+## 🔐 Authentication
+
+Better Auth is used for user authentication.
+
+Authentication features include:
+
+- Email and password authentication.
+- Google OAuth integration.
+- Session management.
+- JWT-based authentication for protected backend API requests.
+
+## 🌐 Deployment
+
+The frontend is designed to be deployed on platforms such as Vercel.
+
+Before deployment:
+
+1. Push your code to GitHub.
+2. Import the repository into Vercel.
+3. Configure the required environment variables.
+4. Deploy the application.
+5. Ensure the backend API URL and authentication configuration are correct.
+
+## 👨‍💻 Developer
+
+**Md Adnan Hossen**
+
+- GitHub: [mdadnanhossen](https://github.com/mdadnanhossen)
+- LinkedIn: [adnan35](https://linkedin.com/in/adnan35)
+
+---
+
+<p align="center">
+  Built with ❤️ for community service and social impact.
+</p>
