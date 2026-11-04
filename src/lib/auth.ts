@@ -18,6 +18,12 @@ export const auth = betterAuth({
     // 6 characters is below the OWASP/NIST minimum of 8.
     minPasswordLength: 8,
   },
+  account: {
+  accountLinking: {
+    enabled: true,
+    trustedProviders: ["google"],
+  },
+},
 
   socialProviders: {
     google: {
