@@ -208,7 +208,7 @@ export default function CreateEventForm() {
     }
   }, [isPending, user, router]);
 
-  // Pre-fill the organizer email from the signed-in profile when it first
+ 
   // becomes available. Adjusting state during render (instead of a
   // setState-in-effect) keeps the value in place before the form is painted.
   const [prefilledEmail, setPrefilledEmail] = useState<string | undefined>(
