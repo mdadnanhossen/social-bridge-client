@@ -2,7 +2,7 @@ import Link from "next/link";
 import { HeartHandshake } from "lucide-react";
 
 interface AuthShellProps {
-  /** Page headline, e.g. "Create Account". */
+ 
   title: string;
   /** One-line supporting copy under the headline. */
   subtitle: string;
