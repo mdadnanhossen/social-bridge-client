@@ -210,7 +210,6 @@ export default function CreateEventForm() {
 
  
  
-  // setState-in-effect) keeps the value in place before the form is painted.
   const [prefilledEmail, setPrefilledEmail] = useState<string | undefined>(
     undefined
   );
