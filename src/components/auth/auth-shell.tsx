@@ -4,9 +4,9 @@ import { HeartHandshake } from "lucide-react";
 interface AuthShellProps {
  
   title: string;
-  /** One-line supporting copy under the headline. */
+  
   subtitle: string;
-  /** The form (and anything else) rendered inside the card. */
+ 
   children: React.ReactNode;
 }
 
