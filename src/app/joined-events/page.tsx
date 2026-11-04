@@ -32,14 +32,7 @@ import { toast } from "sonner";
 import { apiUrl } from "@/lib/api";
 import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
-/**
- * Joined Events page.
- *
- * Lists the events the volunteer has signed up for, read from the local
- * sign-up store (see lib/joined-events — the backend has no join endpoint
- * yet). Event details are loaded from the same API the upcoming-events page
- * uses, then split into upcoming and past sections.
- */
+
 
 /** Events API of the social-bridge backend (see social-bridge-server/index.js). */
 const EVENTS_API_URL = apiUrl("/create-event");
