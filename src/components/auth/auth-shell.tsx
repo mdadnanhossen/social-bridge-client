@@ -30,7 +30,7 @@ export function AuthShell({ title, subtitle, children }: AuthShellProps) {
         <div className="absolute -right-20 bottom-0 size-80 animate-float rounded-full bg-warm-100/70 blur-3xl [animation-delay:2s]" />
       </div>
 
-      {/* Form card */}
+      
       <div className="w-full max-w-md animate-fade-up">
         <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card p-7 shadow-[0_28px_60px_-28px_rgba(15,23,42,0.3)] sm:p-9">
           <span

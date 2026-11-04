@@ -50,7 +50,7 @@ interface DonationEvent {
   date: string;
   location?: string;
 
-  
+
   thumbnail?: string;
   description?: string;
 }
@@ -316,8 +316,7 @@ export default function JoinedEventsPage() {
     return () => controller.abort();
   }, [isHydrated, user, reloadKey]);
 
-  // Joined events are filtered at render time, so leaving one updates the
-  // list instantly through the store without a refetch or loading flash.
+
   const { upcoming } = useMemo(() => {
     const joined = allEvents.filter((event) => joinedIds.has(event._id));
 
