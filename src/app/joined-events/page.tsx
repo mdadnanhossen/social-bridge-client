@@ -347,7 +347,7 @@ export default function JoinedEventsPage() {
       aria-labelledby="joined-events-heading"
       className="relative overflow-hidden py-16 sm:py-20 lg:py-24"
     >
-      {/* Background decoration */}
+    
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-24 -top-32 size-80 rounded-full bg-green-100/60 blur-3xl"
