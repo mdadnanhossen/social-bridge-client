@@ -209,7 +209,7 @@ export default function CreateEventForm() {
   }, [isPending, user, router]);
 
  
-  // becomes available. Adjusting state during render (instead of a
+ 
   // setState-in-effect) keeps the value in place before the form is painted.
   const [prefilledEmail, setPrefilledEmail] = useState<string | undefined>(
     undefined
