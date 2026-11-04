@@ -1,26 +1,229 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@custom-variant dark (&:where(.dark, .dark *));
 
+/* ---------------------------------------------------------------------------
+   SocialBridge design tokens
+   Brand: deep green #166534, warm orange #F59E0B, soft off-white #FAFAF7,
+   dark navy #0F172A for headings.
+   ------------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.75rem;
+
+  --background: #fafaf7;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  --primary: #166534;
+  --primary-foreground: #f8fafc;
+  --secondary: #f0fdf4;
+  --secondary-foreground: #14532d;
+  --muted: #f4f4f0;
+  --muted-foreground: #57534e;
+  --accent: #f59e0b;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+
+  --border: #e7e5e0;
+  --input: #e7e5e0;
+  --ring: #166534;
+
+  /* Raw brand palette for custom section styling */
+  --brand-50: #f0fdf4;
+  --brand-100: #dcfce7;
+  --brand-200: #bbf7d0;
+  --brand-600: #16a34a;
+  --brand-700: #15803d;
+  --brand-800: #166534;
+  --brand-900: #14532d;
+  --warm-50: #fffbeb;
+  --warm-100: #fef3c7;
+  --warm-500: #f59e0b;
+  --warm-600: #d97706;
+  --navy: #0f172a;
+
+
+
+
+}
+.dark {
+  color-scheme: dark;
+
+  --background: #0b1220;
+  --foreground: #f1f5f9;
+
+  --card: #111c2e;
+  --card-foreground: #f1f5f9;
+
+  --popover: #111c2e;
+  --popover-foreground: #f1f5f9;
+
+  --primary: #22c55e;
+  --primary-foreground: #052e16;
+
+  --secondary: #1e293b;
+  --secondary-foreground: #dcfce7;
+
+  --muted: #1e293b;
+  --muted-foreground: #a1a1aa;
+
+  --accent: #f59e0b;
+  --accent-foreground: #ffffff;
+
+  --destructive: #ef4444;
+
+  --border: #334155;
+  --input: #334155;
+  --ring: #22c55e;
+
+  /* Brand colors for dark mode */
+  --brand-50: #14251c;
+  --brand-100: #1b3827;
+  --brand-200: #28583b;
+  --brand-600: #4ade80;
+  --brand-700: #86efac;
+  --brand-800: #86efac;
+  --brand-900: #bbf7d0;
+
+  --warm-50: #292315;
+  --warm-100: #45351a;
+  --warm-500: #fbbf24;
+  --warm-600: #f59e0b;
+
+  --navy: #f1f5f9;
 }
 
 @theme inline {
+  /* shadcn/ui semantic tokens */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand palette */
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+  --color-warm-50: var(--warm-50);
+  --color-warm-100: var(--warm-100);
+  --color-warm-500: var(--warm-500);
+  --color-warm-600: var(--warm-600);
+  --color-navy: var(--navy);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.7s ease-out both;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Gentle keyframes (disabled for users who prefer reduced motion below) */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
   }
 }
 
-body {
-  background: var(--background);
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  /* ========================================
+   Global Dark Mode Text & Surface Fix
+======================================== */
+
+.dark body {
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Common dark text colors */
+.dark .text-black,
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-navy {
+  color: #f1f5f9;
+}
+
+.dark .text-gray-700,
+.dark .text-slate-700,
+.dark .text-gray-600,
+.dark .text-slate-600 {
+  color: #cbd5e1;
+}
+
+/* Common white backgrounds */
+.dark .bg-white,
+.dark .bg-gray-50,
+.dark .bg-gray-100,
+.dark .bg-slate-50,
+.dark .bg-slate-100 {
+  background-color: var(--card);
+}
+
+/* Common borders */
+.dark .border-gray-100,
+.dark .border-gray-200,
+.dark .border-slate-100,
+.dark .border-slate-200 {
+  border-color: var(--border);
+}
+
+  html {
+    /* Smooth anchor scrolling that accounts for the sticky navbar */
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
