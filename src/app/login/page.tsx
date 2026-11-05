@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, Loader2, Mail, TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
 
@@ -15,11 +15,26 @@ import { contactInfo } from "@/data/home";
 import { authClient } from "@/lib/auth-client";
 
 /**
+ * Where to land after signing in, from `?callbackUrl=`.
+ *
+ * Only same-site absolute paths are honoured (`/upcoming-events/…`), so a
+ * crafted link cannot bounce members off-site right after authenticating.
+ * Anything else falls back to the home page.
+ */
+function safeCallbackUrl(value: string | null): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/";
+
+  return value;
+}
+
+/**
  * Login page — signs in with better-auth (email + password) or Google.
  * Apple sign-in is intentionally not offered.
  */
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = safeCallbackUrl(searchParams.get("callbackUrl"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -52,7 +67,7 @@ export default function LoginPage() {
       `Welcome back${data?.user.name ? `, ${data.user.name.split(" ")[0]}` : ""}!`,
       { description: "Great to see you again." }
     );
-    router.push("/");
+    router.push(callbackUrl);
     router.refresh();
   }
 
@@ -160,7 +175,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <GoogleSignInButton />
+        <GoogleSignInButton callbackURL={callbackUrl} />
 
         <p className="text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
@@ -173,5 +188,17 @@ export default function LoginPage() {
         </p>
       </form>
     </AuthShell>
+  );
+}
+
+/**
+ * `useSearchParams` needs a Suspense boundary or the production build
+ * fails this route's prerender, so the form is mounted underneath one.
+ */
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }

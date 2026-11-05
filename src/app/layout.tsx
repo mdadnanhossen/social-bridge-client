@@ -6,6 +6,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/layout/Footer";
 import SiteNavbar from "@/components/layout/SiteNavbar";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { siteDescription } from "@/data/home";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -42,9 +43,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // suppressHydrationWarning: next-themes' inline script sets the theme class
+  // on <html> before React hydrates, so the DOM intentionally differs from
+  // the server render.
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn(
         "h-full",
         "antialiased",
@@ -55,13 +60,15 @@ export default function RootLayout({
       )}
     >
       <body className="flex min-h-full flex-col">
-        <SiteNavbar />
+        <ThemeProvider>
+          <SiteNavbar />
 
-        <main className="flex-1">{children}</main>
+          <main className="flex-1">{children}</main>
 
-        <Toaster position="top-right" richColors closeButton />
+          <Toaster position="top-right" richColors closeButton />
 
-        <Footer />
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { io } from "next/cache";
 import { format } from "date-fns";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -152,6 +153,15 @@ async function EventDetails({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  // Keep this out of the static shell. The build prerenders the route with
+  // placeholder params, which fail the ObjectId check below before any real
+  // I/O runs — without a suspension point, notFound() would be baked into
+  // the prerender and every visitor would see "Event not found". io()
+  // suspends during prerendering (the skeleton ships in the shell) and
+  // resolves immediately on real requests, so the fetch always runs with
+  // the actual event id.
+  await io();
+
   const { id } = await params;
   const event = await fetchEvent(id);
 

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import {
   CalendarDays,
   CheckCircle2,
@@ -66,31 +67,6 @@ const outlineAuthClass =
 const logoutBtnClass =
   "rounded-lg border-red-200 text-red-600 hover:border-red-300 hover:bg-red-50 hover:text-red-600";
 
-/** Broadcast so every mounted navbar stays in sync with the <html> class. */
-const THEME_CHANGE_EVENT = "socialbridge:theme-change";
-
-/**
- * The dark class currently on <html>. A boolean snapshot is referentially
- * stable, so useSyncExternalStore can track it without a setState-in-effect.
- */
-function readIsDark(): boolean {
-  if (typeof window === "undefined") return false;
-
-  return document.documentElement.classList.contains("dark");
-}
-
-function subscribeToTheme(listener: () => void): () => void {
-  if (typeof window === "undefined") return () => {};
-
-  window.addEventListener(THEME_CHANGE_EVENT, listener);
-
-  return () => window.removeEventListener(THEME_CHANGE_EVENT, listener);
-}
-
-function getServerIsDark(): boolean {
-  return false;
-}
-
 /**
  * Static shell shown while the real navbar (which reads URL/session data)
  * streams in behind its Suspense boundary on dynamic routes.
@@ -125,30 +101,10 @@ export function Navbar({ links = DEFAULT_LINKS }: NavbarProps) {
 
   const dropdownOpen = dropdownPath !== null;
 
-  // Theme state mirrors the <html> class instead of copying it in an effect,
-  // so the first client render already agrees with the DOM.
-  const dark = useSyncExternalStore(
-    subscribeToTheme,
-    readIsDark,
-    getServerIsDark
-  );
-
-  useEffect(() => {
-  try {
-    const savedTheme = localStorage.getItem("theme");
-
-    const shouldBeDark =
-      savedTheme === "dark" ||
-      (savedTheme === null &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
-
-    document.documentElement.classList.toggle("dark", shouldBeDark);
-
-    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
-  } catch {
-    // Use the default light theme if storage is unavailable.
-  }
-}, []);
+  // Theme state is owned by next-themes: its inline script applies the saved
+  // theme to <html> while the HTML parses (before first paint — no flash),
+  // and this hook stays in sync with toggles, other tabs, and OS changes.
+  const { resolvedTheme, setTheme } = useTheme();
 
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
@@ -184,15 +140,7 @@ export function Navbar({ links = DEFAULT_LINKS }: NavbarProps) {
   }, [dropdownOpen]);
 
   function toggleTheme() {
-    const next = !dark;
-    document.documentElement.classList.toggle("dark", next);
-    try {
-      localStorage.setItem("theme", next ? "dark" : "light");
-    } catch {
-      /* storage unavailable */
-    }
-    // Notify subscribers (this navbar and any other mounted copy).
-    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   }
 
   async function handleSignOut() {
@@ -217,13 +165,14 @@ export function Navbar({ links = DEFAULT_LINKS }: NavbarProps) {
       type="button"
       onClick={toggleTheme}
       aria-label="Toggle theme"
-      className="flex size-10 items-center justify-center rounded-full border bg-background text-indigo-600 shadow-sm transition hover:bg-muted"
+      title="Toggle light / dark theme"
+      className="flex size-10 items-center justify-center rounded-full border bg-background text-indigo-600 shadow-sm transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:outline-none dark:text-warm-500"
     >
-      {dark ? (
-        <Sun className="size-5" aria-hidden="true" />
-      ) : (
-        <Moon className="size-5" aria-hidden="true" />
-      )}
+      {/* Both icons render on the server and the client; the `.dark` class
+          on <html> decides which one shows. The markup never differs between
+          renders, so there is no hydration mismatch and the swap is instant. */}
+      <Moon className="size-5 dark:hidden" aria-hidden="true" />
+      <Sun className="size-5 hidden dark:block" aria-hidden="true" />
     </button>
   );
 

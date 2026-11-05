@@ -165,9 +165,31 @@
   * {
     @apply border-border outline-ring/50;
   }
-  /* ========================================
-   Global Dark Mode Text & Surface Fix
-======================================== */
+
+  html {
+    /* Smooth anchor scrolling that accounts for the sticky navbar */
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Global dark-mode fixes.
+
+   These MUST stay outside any @layer. Tailwind v4 puts utilities in the
+   `utilities` layer, which is declared last — a later layer beats an earlier
+   one regardless of specificity, so rules placed in @layer base silently lose
+   to the very utility classes they are meant to override. Unlayered rules win
+   over every layer, so these reliably repaint light-only utility classes
+   whenever `.dark` is on <html>.
+
+   `.dark` token overrides (--background, --brand-*, …) live at the top of
+   this file and do not need this treatment: custom properties resolve at the
+   use site, so every var() reference picks them up automatically.
+ ------------------------------------------------------------------------- */
 
 .dark body {
   color: var(--foreground);
@@ -207,14 +229,40 @@
   border-color: var(--border);
 }
 
-  html {
-    /* Smooth anchor scrolling that accounts for the sticky navbar */
-    scroll-padding-top: 5.5rem;
-  }
+/* Red/destructive surfaces: near-white chips, hovers, and borders read as
+   glaring on the dark canvas. Tint them with the destructive token instead.
+   The :hover variants need the extra class to out-specify their own base
+   rule (both are unlayered, so specificity decides). */
+.dark .bg-red-50,
+.dark .hover\:bg-red-50:hover {
+  background-color: color-mix(in srgb, var(--destructive) 12%, transparent);
+}
 
-  body {
-    @apply bg-background text-foreground;
-  }
+.dark .hover\:bg-red-100:hover {
+  background-color: color-mix(in srgb, var(--destructive) 20%, transparent);
+}
+
+.dark .border-red-100,
+.dark .border-red-200,
+.dark .hover\:border-red-200:hover,
+.dark .hover\:border-red-300:hover {
+  border-color: color-mix(in srgb, var(--destructive) 30%, transparent);
+}
+
+.dark .text-red-500,
+.dark .text-red-600,
+.dark .text-red-700,
+.dark .hover\:text-red-700:hover {
+  color: #f87171;
+}
+
+/* White labels on brand fills: brand-700/800 flip to light green in dark
+   mode, where white text is unreadable — swap in the dark primary
+   foreground instead. Also covers hover:bg-brand-800 + hover:text-white. */
+.dark .bg-brand-700.text-white,
+.dark .bg-brand-800.text-white,
+.dark .hover\:bg-brand-800:hover {
+  color: var(--primary-foreground);
 }
 
 @media (prefers-reduced-motion: reduce) {

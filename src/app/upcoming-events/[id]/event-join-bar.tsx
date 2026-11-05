@@ -1,10 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Check, HeartHandshake, Share2, Users } from "lucide-react";
+import { Check, HeartHandshake, LogIn, Share2, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useJoinedEvents } from "@/hooks/use-joined-events";
+import { authClient } from "@/lib/auth-client";
 import { toggleEventJoin } from "@/lib/joined-events";
 
 
@@ -17,7 +19,14 @@ export default function EventJoinBar({
   title: string;
   volunteers: number;
 }) {
+  const router = useRouter();
   const { joinedIds } = useJoinedEvents();
+  const { data: session, isPending } = authClient.useSession();
+
+  // The details page is public; only joining requires an account.
+  const signedIn = Boolean(session?.user);
+  const needsSignIn = !isPending && !signedIn;
+
   const hasJoined = joinedIds.has(id);
 
   const joinedCount = volunteers + (hasJoined ? 1 : 0);
@@ -50,6 +59,14 @@ export default function EventJoinBar({
   }
 
   function handleJoin() {
+    // Signed-out visitors are sent to login and returned to this exact
+    // event page afterwards, so the join they came for is one click away.
+    if (!signedIn) {
+      const callbackUrl = window.location.pathname + window.location.search;
+      router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+      return;
+    }
+
     const nowJoined = toggleEventJoin({
       id,
       title,
@@ -101,14 +118,20 @@ export default function EventJoinBar({
         <Button
           type="button"
           onClick={handleJoin}
+          disabled={isPending}
           aria-pressed={hasJoined}
           className={
-            hasJoined
+            hasJoined && signedIn
               ? "h-12 gap-2 rounded-xl bg-brand-50 px-6 font-semibold text-brand-800 ring-1 ring-brand-200 hover:bg-brand-100"
               : "h-12 gap-2 rounded-xl bg-brand-800 px-6 font-semibold text-white hover:bg-brand-900"
           }
         >
-          {hasJoined ? (
+          {needsSignIn ? (
+            <>
+              <LogIn className="size-4" />
+              Sign in to Join
+            </>
+          ) : hasJoined ? (
             <>
               <Check className="size-4" />
               Joined

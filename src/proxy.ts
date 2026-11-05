@@ -5,10 +5,10 @@ import { auth } from "./lib/auth";
 
 /**
  * Routes that need a signed-in user. The event detail page behind every
- * "View Details" link is matched by the `/upcoming-events/` prefix, so the
- * public event list itself stays reachable while the detail view does not.
- * `/profile` and `/dashboard` carry personal data, so they are gated here as
- * well — their own client-side checks are only a second line of defence.
+ * "View Details" link is deliberately public — anyone may read it; only the
+ * join action itself checks the session on the client. `/profile` and
+ * `/dashboard` carry personal data, so they are gated here as well — their
+ * own client-side checks are only a second line of defence.
  */
 const PROTECTED_PREFIXES = [
   "/profile",
@@ -16,7 +16,6 @@ const PROTECTED_PREFIXES = [
   "/joined-events",
   "/create-event",
   "/manage-events",
-  "/upcoming-events/",
 ];
 
 function isProtectedPath(pathname: string): boolean {
@@ -46,8 +45,9 @@ export async function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Routes Proxy should run on — exact paths plus subpaths, and only the event
-// detail segment of /upcoming-events (the list is public).
+// Routes Proxy should run on — exact paths plus subpaths. The whole
+// /upcoming-events tree stays out of it: the list and the detail page are
+// both public.
 export const config = {
   matcher: [
     "/profile/:path*",
@@ -55,6 +55,5 @@ export const config = {
     "/joined-events/:path*",
     "/create-event/:path*",
     "/manage-events/:path*",
-    "/upcoming-events/:path+",
   ],
 };
